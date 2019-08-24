@@ -17,5 +17,20 @@ def create_figure(current_tick_name, current_month):
   p.xaxis.axis_label = 'date'
   return p
 
+@app.route('/')
+def index():
+  current_tick_name = request.args.get("tick_name")
+  if current_tick_name == None:
+    current_tick_name = "V"
+  
+  current_month = request.args.get("month")
+  if current_month == None:
+    current_month = 1
+
+  plot = create_figure(current_tick_name, current_month)
+      
+  script, div = components(plot)
+  return render_template("stock.html", script=script, div=div, tick_names = tick_names, current_tick_name=current_tick_name, months = months, current_month = current_month)
+
 if __name__ == '__main__':
   app.run(port=33507)
